@@ -5,25 +5,28 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class DemoMainActivity extends ActionBarActivity {
 
-    private KeyboardRelativeLayout mRelativeLsyout;
+    private KeyboardLinearLayout mRelativeLsyout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo_main);
-        mRelativeLsyout = (KeyboardRelativeLayout) findViewById(R.id.demo_layout);
+        mRelativeLsyout = (KeyboardLinearLayout) findViewById(R.id.demo_layout);
         mRelativeLsyout.setOnKeyboardStateListener(new OnKeyboardStateChangeListener() {
             @Override
             public void onKeyBoardShow(int height) {
+                Toast.makeText(DemoMainActivity.this,"show " + height,Toast.LENGTH_SHORT).show();
                 Log.d("KeyBoardStateChange: ", " show "+ height);
             }
 
             @Override
             public void onKeyBoardHide() {
+                Toast.makeText(DemoMainActivity.this,"hide",Toast.LENGTH_SHORT).show();
                 Log.d("KeyBoardStateChange: ", " hide");
             }
         });
