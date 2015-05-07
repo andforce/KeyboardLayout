@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.zarroboogs.keyboardlayout.OnKeyboardStateChangeListener;
@@ -41,7 +42,7 @@ public class KeyboardHelper {
         hideKeyBoardForce(this.mRootView);
     }
 
-    public void showKeyboard(TextView view) {
+    public void showKeyboard(EditText view) {
         showKeyBoardForce(view);
     }
 

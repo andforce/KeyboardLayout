@@ -1,5 +1,6 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.zarroboogs.keyboardlayout.KeyboardRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -14,18 +15,13 @@
         android:id="@+id/editText2"
         android:layout_centerHorizontal="true" />
 
-    <org.zarroboogs.keyboardlayout.KeyboardLinearLayout
-        android:layout_below="@id/editText2"
+
+    <Button
+        android:layout_alignParentBottom="true"
+        android:text="Keyboard Switch"
         android:layout_width="match_parent"
-        android:id="@+id/demo_layout"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText" />
-    </org.zarroboogs.keyboardlayout.KeyboardLinearLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/editText" />
 
 
-
-</RelativeLayout>
+</org.zarroboogs.keyboardlayout.KeyboardRelativeLayout>
