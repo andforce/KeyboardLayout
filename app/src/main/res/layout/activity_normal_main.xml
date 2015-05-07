@@ -1,27 +1,33 @@
-<org.zarroboogs.keyboardlayout.KeyboardRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".DemoMainActivity">
 
-    <EditText
+
+    <org.zarroboogs.keyboardlayout.KeyboardRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText2"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/root"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText2" />
 
 
-    <Button
-        android:layout_alignParentBottom="true"
-        android:text="Keyboard Switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText" />
+        <Button
+            android:layout_alignParentBottom="true"
+            android:text="Keyboard Switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText" />
+    </org.zarroboogs.keyboardlayout.KeyboardRelativeLayout>
 
 
-</org.zarroboogs.keyboardlayout.KeyboardRelativeLayout>
+</ScrollView>
