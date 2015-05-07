@@ -4,7 +4,9 @@ package org.zarroboogs.keyboardlayout;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -32,6 +34,10 @@ public class KeyboardLinearLayout extends LinearLayout {
 
     public void setOnKeyboardStateListener(OnKeyboardStateChangeListener listener) {
         mHelper.setOnKeyboardStateListener(listener);
+    }
+
+    public KeyboardHelper getKeyBoardHelper(){
+        return mHelper;
     }
 
     @Override
