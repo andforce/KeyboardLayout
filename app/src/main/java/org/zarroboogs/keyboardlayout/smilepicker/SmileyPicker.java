@@ -40,8 +40,6 @@ import java.util.regex.Matcher;
 
 public class SmileyPicker extends LinearLayout {
 
-    private int mPickerHeight;
-
     private EditText mEditText;
 
     private LayoutInflater mInflater;
