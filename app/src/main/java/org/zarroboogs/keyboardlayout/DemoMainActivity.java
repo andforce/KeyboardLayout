@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import org.zarroboogs.keyboardlayout.smilepicker.SmileyPicker;
+
 
 public class DemoMainActivity extends ActionBarActivity {
 
@@ -22,7 +24,9 @@ public class DemoMainActivity extends ActionBarActivity {
 
     private EditText mEditText;
 
-    private ImageView mImageView;
+//    private ImageView mImageView;
+
+    private SmileyPicker smilePickerLayout;
 
     private ScrollView scrollView;
 
@@ -31,18 +35,26 @@ public class DemoMainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo_main);
-        mImageView = (ImageView) findViewById(R.id.hide_imagview);
+//        mImageView = (ImageView) findViewById(R.id.hide_imagview);
+        mEditText = (EditText) findViewById(R.id.editText2);
+
+        smilePickerLayout = (SmileyPicker) findViewById(R.id.smilePickerLayout);
+
+
         scrollView = (ScrollView) findViewById(R.id.scrollview);
 
         mRelativeLsyout = (KeyboardRelativeLayout) findViewById(R.id.root);
+        smilePickerLayout.setEditText(mRelativeLsyout, mEditText);
+
 
         mRelativeLsyout.setOnKeyboardStateListener(new OnKeyboardStateChangeListener() {
             @Override
             public void onKeyBoardShow(int height) {
 
                 if (mSwitchCkick){
-                    mImageView.setVisibility(View.GONE);
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    smilePickerLayout.setVisibility(View.GONE);
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     scrollView.setLayoutParams(params);
                 }
 
@@ -53,7 +65,7 @@ public class DemoMainActivity extends ActionBarActivity {
 
                 if (mSwitchCkick){
 //                    mImageView.setVisibility(View.VISIBLE);
-                    showViewWithAnim(mImageView);
+                    showViewWithAnim(smilePickerLayout);
                 }
             }
         });
@@ -70,7 +82,8 @@ public class DemoMainActivity extends ActionBarActivity {
 
                 if (mRelativeLsyout.getKeyBoardHelper().isKeyboardShow()){
 
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, scrollView.getHeight());
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, scrollView.getHeight());
                     scrollView.setLayoutParams(params);
 
                     mRelativeLsyout.getKeyBoardHelper().hideKeyboard();
@@ -85,15 +98,15 @@ public class DemoMainActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        if (mImageView.getVisibility() == View.VISIBLE){
-            removeViewWithAnim(mImageView);
+        if (smilePickerLayout.getVisibility() == View.VISIBLE){
+            removeViewWithAnim(smilePickerLayout);
         }else{
             super.onBackPressed();
         }
     }
 
     private void showViewWithAnim(View view){
-        mImageView.setVisibility(View.VISIBLE);
+        smilePickerLayout.setVisibility(View.VISIBLE);
 
         Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0, Animation.RELATIVE_TO_SELF, 0,
                 Animation.RELATIVE_TO_SELF,1, Animation.RELATIVE_TO_SELF, 0);
@@ -119,8 +132,8 @@ public class DemoMainActivity extends ActionBarActivity {
             public void onAnimationEnd(Animation animation) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 scrollView.setLayoutParams(params);
-                mImageView.setVisibility(View.GONE);
-                mImageView.requestLayout();
+                smilePickerLayout.setVisibility(View.GONE);
+                smilePickerLayout.requestLayout();
             }
 
             @Override

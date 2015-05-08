@@ -48,12 +48,20 @@
     </ScrollView>
 
 
-    <ImageView
+    <org.zarroboogs.keyboardlayout.smilepicker.SmileyPicker
+        android:id="@+id/smilePickerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@+id/scrollview"
+        android:layout_alignParentBottom="true" />
+
+    <!--<ImageView
         android:layout_below="@+id/scrollview"
         android:src="@mipmap/ic_launcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:id="@+id/hide_imagview"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true" />-->
 </org.zarroboogs.keyboardlayout.KeyboardRelativeLayout>
