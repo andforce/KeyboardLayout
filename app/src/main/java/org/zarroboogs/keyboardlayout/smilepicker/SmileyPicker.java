@@ -2,6 +2,8 @@
 package org.zarroboogs.keyboardlayout.smilepicker;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -262,7 +264,9 @@ public class SmileyPicker extends LinearLayout {
                 int k = localMatcher.start();
                 int m = localMatcher.end();
                 if (m - k < 8) {
-                    ImageSpan localImageSpan = new ImageSpan(mContext,smiles.get(key));
+                    Drawable drawable = mContext.getResources().getDrawable(smiles.get(key));
+                    drawable.setBounds(0, 0, 50, 50);
+                    ImageSpan localImageSpan = new ImageSpan(drawable);//new ImageSpan(mContext,smiles.get(key));
                     value.setSpan(localImageSpan, k, m, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
