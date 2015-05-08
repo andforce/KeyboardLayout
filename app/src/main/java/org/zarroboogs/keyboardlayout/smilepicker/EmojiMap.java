@@ -4,9 +4,6 @@ package org.zarroboogs.keyboardlayout.smilepicker;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * User: qii Date: 13-10-25
- */
 public class EmojiMap {
 
     private static EmojiMap instance = new EmojiMap();

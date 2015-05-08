@@ -4,9 +4,6 @@ package org.zarroboogs.keyboardlayout.smilepicker;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * User: qii Date: 13-3-4 42+6=48
- */
 public class SmileyMap {
 
     public static final int GENERAL_EMOTION_POSITION = 0;

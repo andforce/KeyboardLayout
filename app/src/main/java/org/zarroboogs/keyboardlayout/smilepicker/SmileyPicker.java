@@ -38,9 +38,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 
-/**
- * User: qii Date: 13-1-18
- */
 public class SmileyPicker extends LinearLayout {
 
     private int mPickerHeight;

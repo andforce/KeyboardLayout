@@ -5,9 +5,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-/**
- * User: qii Date: 13-10-24
- */
 public class SquareFrameLayout extends FrameLayout {
 
     public SquareFrameLayout(Context context, AttributeSet attrs, int defStyle) {
