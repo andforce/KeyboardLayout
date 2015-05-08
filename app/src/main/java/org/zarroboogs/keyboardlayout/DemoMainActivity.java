@@ -4,8 +4,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 
@@ -15,23 +22,39 @@ public class DemoMainActivity extends ActionBarActivity {
 
     private EditText mEditText;
 
+    private ImageView mImageView;
+
+    private ScrollView scrollView;
+
+    private boolean mSwitchCkick = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_normal_main);
+        setContentView(R.layout.activity_demo_main);
+        mImageView = (ImageView) findViewById(R.id.hide_imagview);
+        scrollView = (ScrollView) findViewById(R.id.scrollview);
+
         mRelativeLsyout = (KeyboardRelativeLayout) findViewById(R.id.root);
 
         mRelativeLsyout.setOnKeyboardStateListener(new OnKeyboardStateChangeListener() {
             @Override
             public void onKeyBoardShow(int height) {
-                Toast.makeText(DemoMainActivity.this, "show " + height, Toast.LENGTH_SHORT).show();
-                Log.d("KeyBoardStateChange: ", " show " + height);
+
+                if (mSwitchCkick){
+                    mImageView.setVisibility(View.GONE);
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    scrollView.setLayoutParams(params);
+                }
+
             }
 
             @Override
             public void onKeyBoardHide() {
-                Toast.makeText(DemoMainActivity.this, "hide", Toast.LENGTH_SHORT).show();
-                Log.d("KeyBoardStateChange: ", " hide");
+
+                if (mSwitchCkick){
+//                    mImageView.setVisibility(View.VISIBLE);
+                    showViewWithAnim(mImageView);
+                }
             }
         });
 
@@ -42,13 +65,70 @@ public class DemoMainActivity extends ActionBarActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                mSwitchCkick = true;
+
                 if (mRelativeLsyout.getKeyBoardHelper().isKeyboardShow()){
+
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, scrollView.getHeight());
+                    scrollView.setLayoutParams(params);
+
                     mRelativeLsyout.getKeyBoardHelper().hideKeyboard();
+
                 }else {
                     mRelativeLsyout.getKeyBoardHelper().showKeyboard(mEditText);
                 }
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mImageView.getVisibility() == View.VISIBLE){
+            removeViewWithAnim(mImageView);
+        }else{
+            super.onBackPressed();
+        }
+    }
+
+    private void showViewWithAnim(View view){
+        mImageView.setVisibility(View.VISIBLE);
+
+        Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0, Animation.RELATIVE_TO_SELF, 0,
+                Animation.RELATIVE_TO_SELF,1, Animation.RELATIVE_TO_SELF, 0);
+        animation.setDuration(200);
+        animation.setFillAfter(true);
+
+        view.startAnimation(animation);
+
+    }
+
+    private void removeViewWithAnim(View view){
+        Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0, Animation.RELATIVE_TO_SELF, 0,
+                Animation.RELATIVE_TO_SELF,0, Animation.RELATIVE_TO_SELF, 1);
+        animation.setDuration(200);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                scrollView.setLayoutParams(params);
+                mImageView.setVisibility(View.GONE);
+                mImageView.requestLayout();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(animation);
+
     }
 }
