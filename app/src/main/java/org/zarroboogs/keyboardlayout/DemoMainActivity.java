@@ -44,7 +44,7 @@ public class DemoMainActivity extends ActionBarActivity {
         scrollView = (ScrollView) findViewById(R.id.scrollview);
 
         mRelativeLsyout = (KeyboardRelativeLayout) findViewById(R.id.root);
-        smilePickerLayout.setEditText(mRelativeLsyout, mEditText);
+        smilePickerLayout.setEditText( mEditText);
 
 
         mRelativeLsyout.setOnKeyboardStateListener(new OnKeyboardStateChangeListener() {

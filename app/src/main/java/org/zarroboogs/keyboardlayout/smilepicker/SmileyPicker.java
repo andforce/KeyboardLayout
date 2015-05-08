@@ -1,24 +1,18 @@
 
 package org.zarroboogs.keyboardlayout.smilepicker;
 
-import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
+import android.util.ArrayMap;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -29,10 +23,8 @@ import android.widget.TextView;
 
 import org.zarroboogs.keyboardlayout.R;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,8 +38,6 @@ public class SmileyPicker extends LinearLayout {
 
     private Context mContext;
 
-    private final LayoutTransition transitioner = new LayoutTransition();
-
     private ViewPager viewPager;
 
     private ImageView centerPoint;
@@ -55,7 +45,6 @@ public class SmileyPicker extends LinearLayout {
     private ImageView leftPoint;
 
     private ImageView rightPoint;
-    public LinkedHashMap<Integer, LinkedHashMap<String, Bitmap>> emotionsPic = null;
 
     public SmileyPicker(Context paramContext) {
         super(paramContext);
@@ -66,15 +55,15 @@ public class SmileyPicker extends LinearLayout {
         super(paramContext, paramAttributeSet);
         mContext = paramContext;
 
-        emotionsPic = new LinkedHashMap<Integer, LinkedHashMap<String, Bitmap>>();
-
         this.mInflater = LayoutInflater.from(paramContext);
         View view = this.mInflater.inflate(R.layout.writeweiboactivity_smileypicker, null);
+
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         viewPager.setAdapter(new SmileyPagerAdapter());
         leftPoint = (ImageView) view.findViewById(R.id.left_point);
         centerPoint = (ImageView) view.findViewById(R.id.center_point);
         rightPoint = (ImageView) view.findViewById(R.id.right_point);
+
         if (true) {
             rightPoint.setVisibility(View.VISIBLE);
         } else {
@@ -108,9 +97,8 @@ public class SmileyPicker extends LinearLayout {
         addView(view);
     }
 
-    public void setEditText(ViewGroup rootLayout, EditText paramEditText) {
+    public void setEditText( EditText paramEditText) {
         this.mEditText = paramEditText;
-        rootLayout.setLayoutTransition(transitioner);
 
     }
 
@@ -121,7 +109,6 @@ public class SmileyPicker extends LinearLayout {
         public void destroyItem(ViewGroup container, int position, Object object) {
             View view = (View) object;
             container.removeView(view);
-
         }
 
         @Override
@@ -132,6 +119,7 @@ public class SmileyPicker extends LinearLayout {
             GridView gridView = (GridView) view.findViewById(R.id.smiley_grid);
 
             gridView.setAdapter(new SmileyAdapter(mContext, position));
+
             container.addView(view, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -161,7 +149,7 @@ public class SmileyPicker extends LinearLayout {
 
         private List<String> keys;
 
-        private Map<String, Bitmap> bitmapMap;
+        private Map<String, Integer> mSmiles;
 
         private int emotionPosition;
 
@@ -172,40 +160,40 @@ public class SmileyPicker extends LinearLayout {
             this.emotionPosition = emotionPosition;
             this.mInflater = LayoutInflater.from(context);
             this.keys = new ArrayList<String>();
+
             Set<String> keySet;
             switch (emotionPosition) {
                 case SmileyMap.GENERAL_EMOTION_POSITION:
-                    keySet = getEmotionsPics().keySet();
+                    keySet = SmileyMap.getInstance().getGeneral().keySet();
                     keys.addAll(keySet);
-                    bitmapMap = getEmotionsPics();
-                    count = bitmapMap.size();
+                    mSmiles = SmileyMap.getInstance().getGeneral();
+                    count = mSmiles.size();
                     break;
                 case SmileyMap.EMOJI_EMOTION_POSITION:
                     keySet = EmojiMap.getInstance().getMap().keySet();
                     keys.addAll(keySet);
-                    bitmapMap = null;
+                    mSmiles = null;
                     count = keys.size();
                     break;
                 case SmileyMap.HUAHUA_EMOTION_POSITION:
-                    keySet = getHuahuaPics().keySet();
+                    keySet = SmileyMap.getInstance().getHuahua().keySet();
                     keys.addAll(keySet);
-                    bitmapMap = getHuahuaPics();
-                    count = bitmapMap.size();
+                    mSmiles = SmileyMap.getInstance().getHuahua();
+                    count = mSmiles.size();
                     break;
                 default:
                     throw new IllegalArgumentException("emotion position is invalid");
             }
-
         }
 
         private void bindView(final int position, View contentView) {
             ImageView imageView = ((ImageView) contentView.findViewById(R.id.smiley_item));
             TextView textView = (TextView) contentView.findViewById(R.id.smiley_text_item);
+
             if (emotionPosition != SmileyMap.EMOJI_EMOTION_POSITION) {
                 imageView.setVisibility(View.VISIBLE);
                 textView.setVisibility(View.INVISIBLE);
-                imageView.setImageBitmap(bitmapMap.get(keys.get(position)));
-
+                    imageView.setImageResource(mSmiles.get(keys.get(position)));
             } else {
                 imageView.setVisibility(View.INVISIBLE);
                 textView.setVisibility(View.VISIBLE);
@@ -224,7 +212,7 @@ public class SmileyPicker extends LinearLayout {
                         edit.insert(index, text);// 光标所在位置插入文字
                     }
                     String content = mEditText.getText().toString();
-                    addEmotions(mEditText, content);
+                    addEmotions(mEditText, content, SmileyMap.getInstance().getSmiles());
                     mEditText.setSelection(index + text.length());
                 }
             });
@@ -253,7 +241,7 @@ public class SmileyPicker extends LinearLayout {
         }
     }
 
-    public void addEmotions(EditText et, String txt) {
+    public void addEmotions(EditText et, String txt, Map<String, Integer> smiles) {
         String hackTxt;
         if (txt.startsWith("[") && txt.endsWith("]")) {
             hackTxt = txt + " ";
@@ -261,81 +249,24 @@ public class SmileyPicker extends LinearLayout {
             hackTxt = txt;
         }
         SpannableString value = SpannableString.valueOf(hackTxt);
-        addEmotions(value);
+        addEmotions(value, smiles);
         et.setText(value);
     }
 
-    public synchronized Map<String, Bitmap> getEmotionsPics() {
-        if (emotionsPic != null && emotionsPic.size() > 0) {
-            return emotionsPic.get(SmileyMap.GENERAL_EMOTION_POSITION);
-        } else {
-            getEmotionsTask();
-            return emotionsPic.get(SmileyMap.GENERAL_EMOTION_POSITION);
-        }
-    }
 
-    public synchronized Map<String, Bitmap> getHuahuaPics() {
-        if (emotionsPic != null && emotionsPic.size() > 0) {
-            return emotionsPic.get(SmileyMap.HUAHUA_EMOTION_POSITION);
-        } else {
-            getEmotionsTask();
-            return emotionsPic.get(SmileyMap.HUAHUA_EMOTION_POSITION);
-        }
-    }
-
-    private void getEmotionsTask() {
-        Map<String, String> general = SmileyMap.getInstance().getGeneral();
-        emotionsPic.put(SmileyMap.GENERAL_EMOTION_POSITION, getEmotionsTask(general));
-        Map<String, String> huahua = SmileyMap.getInstance().getHuahua();
-        emotionsPic.put(SmileyMap.HUAHUA_EMOTION_POSITION, getEmotionsTask(huahua));
-    }
-
-    private LinkedHashMap<String, Bitmap> getEmotionsTask(Map<String, String> emotionMap) {
-        List<String> index = new ArrayList<String>();
-        index.addAll(emotionMap.keySet());
-        LinkedHashMap<String, Bitmap> bitmapMap = new LinkedHashMap<String, Bitmap>();
-        for (String str : index) {
-            String name = emotionMap.get(str);
-            AssetManager assetManager = getContext().getAssets();
-            InputStream inputStream;
-            try {
-                inputStream = assetManager.open(name);
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                if (bitmap != null) {
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,
-                            50,50, true);
-                    if (bitmap != scaledBitmap) {
-                        bitmap.recycle();
-                        bitmap = scaledBitmap;
-                    }
-                    bitmapMap.put(str, bitmap);
-                }
-            } catch (IOException ignored) {
-
-            }
-        }
-
-        return bitmapMap;
-    }
-
-    private void addEmotions(SpannableString value) {
+    private void addEmotions(SpannableString value, Map<String, Integer> smiles) {
         Matcher localMatcher = WeiboPatterns.EMOTION_URL.matcher(value);
         while (localMatcher.find()) {
-            String str2 = localMatcher.group(0);
-            int k = localMatcher.start();
-            int m = localMatcher.end();
-            if (m - k < 8) {
-                Bitmap bitmap = getEmotionsPics().get(str2);
-                if (bitmap == null) {
-                    bitmap = getHuahuaPics().get(str2);
-                }
-                if (bitmap != null) {
-                    ImageSpan localImageSpan = new ImageSpan(this.getContext(), bitmap,
-                            ImageSpan.ALIGN_BASELINE);
+            String key = localMatcher.group(0);
+            if (smiles.containsKey(key)){
+                int k = localMatcher.start();
+                int m = localMatcher.end();
+                if (m - k < 8) {
+                    ImageSpan localImageSpan = new ImageSpan(mContext,smiles.get(key));
                     value.setSpan(localImageSpan, k, m, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
-
             }
+
         }
     }
 }
