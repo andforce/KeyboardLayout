@@ -1,19 +1,20 @@
 package org.zarroboogs.keyboardlayout;
 
+import android.animation.ValueAnimator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import org.zarroboogs.keyboardlayout.smilepicker.SmileyPicker;
 
@@ -24,18 +25,18 @@ public class DemoMainActivity extends ActionBarActivity {
 
     private EditText mEditText;
 
-//    private ImageView mImageView;
-
     private SmileyPicker smilePickerLayout;
 
     private ScrollView scrollView;
 
-    private boolean mSwitchCkick = false;
+    private boolean mSwitchClicked = false;
+
+    private int mKeyboardHeight = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo_main);
-//        mImageView = (ImageView) findViewById(R.id.hide_imagview);
         mEditText = (EditText) findViewById(R.id.editText2);
 
         smilePickerLayout = (SmileyPicker) findViewById(R.id.smilePickerLayout);
@@ -44,14 +45,14 @@ public class DemoMainActivity extends ActionBarActivity {
         scrollView = (ScrollView) findViewById(R.id.scrollview);
 
         mRelativeLsyout = (KeyboardRelativeLayout) findViewById(R.id.root);
-        smilePickerLayout.setEditText( mEditText);
+        smilePickerLayout.setEditText(mEditText);
 
 
         mRelativeLsyout.setOnKeyboardStateListener(new OnKeyboardStateChangeListener() {
             @Override
             public void onKeyBoardShow(int height) {
-
-                if (mSwitchCkick){
+                mKeyboardHeight = height;
+                if (mSwitchClicked) {
                     smilePickerLayout.setVisibility(View.GONE);
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -63,7 +64,7 @@ public class DemoMainActivity extends ActionBarActivity {
             @Override
             public void onKeyBoardHide() {
 
-                if (mSwitchCkick){
+                if (mSwitchClicked) {
 //                    mImageView.setVisibility(View.VISIBLE);
                     showViewWithAnim(smilePickerLayout);
                 }
@@ -78,9 +79,9 @@ public class DemoMainActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
 
-                mSwitchCkick = true;
+                mSwitchClicked = true;
 
-                if (mRelativeLsyout.getKeyBoardHelper().isKeyboardShow()){
+                if (mRelativeLsyout.getKeyBoardHelper().isKeyboardShow()) {
 
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT, scrollView.getHeight());
@@ -88,7 +89,7 @@ public class DemoMainActivity extends ActionBarActivity {
 
                     mRelativeLsyout.getKeyBoardHelper().hideKeyboard();
 
-                }else {
+                } else {
                     mRelativeLsyout.getKeyBoardHelper().showKeyboard(mEditText);
                 }
 
@@ -98,42 +99,92 @@ public class DemoMainActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        if (smilePickerLayout.getVisibility() == View.VISIBLE){
+        if (smilePickerLayout.getVisibility() == View.VISIBLE) {
             removeViewWithAnim(smilePickerLayout);
-        }else{
+        } else {
             super.onBackPressed();
         }
     }
 
-    private void showViewWithAnim(View view){
+    private void showViewWithAnim(View view) {
         smilePickerLayout.setVisibility(View.VISIBLE);
 
-        Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0, Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF,1, Animation.RELATIVE_TO_SELF, 0);
-        animation.setDuration(200);
-        animation.setFillAfter(true);
+        Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0,
+                Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0);
+        animation.setDuration(150);
+//        animation.setFillAfter(true);
 
         view.startAnimation(animation);
 
     }
 
-    private void removeViewWithAnim(View view){
-        Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0, Animation.RELATIVE_TO_SELF, 0,
-                Animation.RELATIVE_TO_SELF,0, Animation.RELATIVE_TO_SELF, 1);
-        animation.setDuration(200);
-        animation.setFillAfter(true);
-        animation.setAnimationListener(new Animation.AnimationListener() {
+    private void changeLayout() {
+
+        final RelativeLayout.LayoutParams oldParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
+
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(oldParams.height, mKeyboardHeight + oldParams.height);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+                int value = (int) animation.getAnimatedValue();
+                if (value == oldParams.height) {
+                    return;
+                } else {
+                    oldParams.height = value;
+                }
+//                Log.d("changeLayout", "onAnimationUpdate " + oldParams.height);
+                scrollView.requestLayout();
+            }
+        });
+        valueAnimator.setDuration(200);
+        valueAnimator.start();
+
+    }
+
+    private void removeViewWithAnim(final View view) {
+        final RelativeLayout.LayoutParams oldParams = (RelativeLayout.LayoutParams) scrollView.getLayoutParams();
+
+        final int oldHeight = oldParams.height;
+
+        AnimationSet animationSet = new AnimationSet(true);
+
+        // create alpha anim
+        Animation fadeOut = AnimationUtils.loadAnimation(view.getContext(), android.R.anim.fade_out);
+        animationSet.addAnimation(fadeOut);
+
+        // create translate anim
+        TranslateAnimation transAnim = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0,
+                Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1) {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                super.applyTransformation(interpolatedTime, t);
+                Log.d("applyTransformation", "time:  " + interpolatedTime);
+                oldParams.height = (int) (oldHeight + mKeyboardHeight * interpolatedTime);
+                scrollView.requestLayout();
+
+            }
+        };
+        animationSet.addAnimation(transAnim);
+
+        // set duration
+        animationSet.setDuration(200);
+
+        animationSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
+//                changeLayout();
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                scrollView.setLayoutParams(params);
+
+                view.setVisibility(View.GONE);
                 smilePickerLayout.setVisibility(View.GONE);
-                smilePickerLayout.requestLayout();
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                scrollView.setLayoutParams(params);
+
             }
 
             @Override
@@ -141,7 +192,7 @@ public class DemoMainActivity extends ActionBarActivity {
 
             }
         });
-        view.startAnimation(animation);
+        view.startAnimation(animationSet);
 
     }
 }

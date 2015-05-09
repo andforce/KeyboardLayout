@@ -38,11 +38,9 @@ public class SmileyPicker extends LinearLayout {
 
     private EditText mEditText;
 
-    private LayoutInflater mInflater;
 
     private Context mContext;
 
-    private ViewPager viewPager;
 
     private ImageView centerPoint;
 
@@ -61,11 +59,10 @@ public class SmileyPicker extends LinearLayout {
     public SmileyPicker(Context paramContext, AttributeSet paramAttributeSet) {
         super(paramContext, paramAttributeSet);
         mContext = paramContext;
+        LayoutInflater mInflater = LayoutInflater.from(paramContext);
+        View view = mInflater.inflate(R.layout.writeweiboactivity_smileypicker, null);
 
-        this.mInflater = LayoutInflater.from(paramContext);
-        View view = this.mInflater.inflate(R.layout.writeweiboactivity_smileypicker, null);
-
-        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         viewPager.setAdapter(new SmileyPagerAdapter());
         leftPoint = (ImageView) view.findViewById(R.id.left_point);
         centerPoint = (ImageView) view.findViewById(R.id.center_point);
@@ -227,18 +224,22 @@ public class SmileyPicker extends LinearLayout {
 
 
 
+        @Override
         public int getCount() {
             return count;
         }
 
+        @Override
         public Object getItem(int paramInt) {
             return null;
         }
 
+        @Override
         public long getItemId(int paramInt) {
             return 0L;
         }
 
+        @Override
         public View getView(int paramInt, View paramView, ViewGroup paramViewGroup) {
             if (paramView == null) {
                 paramView = this.mInflater.inflate(R.layout.writeweiboactivity_smileypicker_item, null);
