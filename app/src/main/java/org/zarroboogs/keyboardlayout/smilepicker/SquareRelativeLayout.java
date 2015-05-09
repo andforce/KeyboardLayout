@@ -4,18 +4,19 @@ package org.zarroboogs.keyboardlayout.smilepicker;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
-public class SquareFrameLayout extends FrameLayout {
+public class SquareRelativeLayout extends RelativeLayout {
 
-    public SquareFrameLayout(Context context, AttributeSet attrs, int defStyle) {
+    public SquareRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public SquareFrameLayout(Context context, AttributeSet attrs) {
+    public SquareRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SquareFrameLayout(Context context) {
+    public SquareRelativeLayout(Context context) {
         super(context);
     }
 

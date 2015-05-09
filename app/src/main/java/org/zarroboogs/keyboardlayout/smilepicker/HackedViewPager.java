@@ -5,13 +5,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class ViewPagerFixed extends android.support.v4.view.ViewPager {
+public class HackedViewPager extends android.support.v4.view.ViewPager {
 
-    public ViewPagerFixed(Context context) {
+    public HackedViewPager(Context context) {
         super(context);
     }
 
-    public ViewPagerFixed(Context context, AttributeSet attrs) {
+    public HackedViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

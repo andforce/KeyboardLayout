@@ -3,6 +3,7 @@ package org.zarroboogs.keyboardlayout.smilepicker;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SmileyPicker extends LinearLayout {
 
@@ -47,6 +49,9 @@ public class SmileyPicker extends LinearLayout {
     private ImageView leftPoint;
 
     private ImageView rightPoint;
+
+    public static final Pattern EMOTION_URL = Pattern.compile("\\[(\\S+?)\\]");
+
 
     public SmileyPicker(Context paramContext) {
         super(paramContext);
@@ -257,7 +262,11 @@ public class SmileyPicker extends LinearLayout {
 
 
     private void addEmotions(SpannableString value, Map<String, Integer> smiles) {
-        Matcher localMatcher = WeiboPatterns.EMOTION_URL.matcher(value);
+        Paint.FontMetrics fontMetrics = mEditText.getPaint().getFontMetrics();
+        int size = (int)(fontMetrics.descent-fontMetrics.ascent);
+
+
+        Matcher localMatcher = EMOTION_URL.matcher(value);
         while (localMatcher.find()) {
             String key = localMatcher.group(0);
             if (smiles.containsKey(key)){
@@ -265,8 +274,11 @@ public class SmileyPicker extends LinearLayout {
                 int m = localMatcher.end();
                 if (m - k < 8) {
                     Drawable drawable = mContext.getResources().getDrawable(smiles.get(key));
-                    drawable.setBounds(0, 0, 50, 50);
-                    ImageSpan localImageSpan = new ImageSpan(drawable);//new ImageSpan(mContext,smiles.get(key));
+                    drawable.setBounds(0, 0, size, size);
+                    if (key.equals("[doge]")){
+                        drawable.setBounds(0,0,size * 5, size * 5);
+                    }
+                    ImageSpan localImageSpan = new ImageSpan(drawable);
                     value.setSpan(localImageSpan, k, m, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }

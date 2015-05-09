@@ -4,4 +4,6 @@
     android:id="@+id/smiley_grid"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:numColumns="7"/>
+    android:stretchMode="columnWidth"
+    android:columnWidth="45dp"
+    android:numColumns="auto_fit"/>
