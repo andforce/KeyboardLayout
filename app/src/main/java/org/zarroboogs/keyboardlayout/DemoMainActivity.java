@@ -1,7 +1,7 @@
 package org.zarroboogs.keyboardlayout;
 
 import android.animation.ValueAnimator;
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +19,7 @@ import android.widget.ScrollView;
 import org.zarroboogs.keyboardlayout.smilepicker.SmileyPicker;
 
 
-public class DemoMainActivity extends ActionBarActivity {
+public class DemoMainActivity extends Activity {
 
     private KeyboardRelativeLayout mRelativeLsyout;
 
