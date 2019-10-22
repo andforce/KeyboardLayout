@@ -1,28 +1,29 @@
 
-package org.zarroboogs.keyboardlayout;
+package com.andforce.keyboardlayout;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
-import org.zarroboogs.keyboardlayout.helper.KeyboardStateWatcher;
+import com.andforce.keyboardlayout.watcher.KeyboardStateWatcher;
+import com.andforce.keyboardlayout.watcher.OnKeyboardStateChangeListener;
 
-public class KeyboardFrameLayout extends FrameLayout {
+public class KeyboardRelativeLayout extends RelativeLayout {
 
 
     private KeyboardStateWatcher mKeyboardStateWatcher;
 
-    public KeyboardFrameLayout(Context context, AttributeSet attrs, int defStyle) {
+    public KeyboardRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mKeyboardStateWatcher = new KeyboardStateWatcher(this);
     }
 
-    public KeyboardFrameLayout(Context context, AttributeSet attrs) {
+    public KeyboardRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         mKeyboardStateWatcher = new KeyboardStateWatcher(this);
     }
 
-    public KeyboardFrameLayout(Context context) {
+    public KeyboardRelativeLayout(Context context) {
         super(context);
         mKeyboardStateWatcher = new KeyboardStateWatcher(this);
     }

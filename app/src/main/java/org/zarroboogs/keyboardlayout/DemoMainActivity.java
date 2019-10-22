@@ -16,6 +16,9 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
+import com.andforce.keyboardlayout.KeyboardRelativeLayout;
+import com.andforce.keyboardlayout.watcher.OnKeyboardStateChangeListener;
+
 import org.zarroboogs.keyboardlayout.smilepicker.SmileyPicker;
 
 

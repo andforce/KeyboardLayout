@@ -1,4 +1,4 @@
-package org.zarroboogs.keyboardlayout.helper;
+package com.andforce.keyboardlayout.watcher;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
-import org.zarroboogs.keyboardlayout.OnKeyboardStateChangeListener;
 
 /**
  * Created by wangdiyuan on 15-5-7.

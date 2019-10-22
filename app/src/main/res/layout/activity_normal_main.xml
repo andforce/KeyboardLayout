@@ -10,7 +10,7 @@
     tools:context=".DemoMainActivity">
 
 
-    <org.zarroboogs.keyboardlayout.KeyboardRelativeLayout
+    <com.andforce.keyboardlayout.KeyboardRelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/root"
         android:layout_height="wrap_content">
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editText" />
-    </org.zarroboogs.keyboardlayout.KeyboardRelativeLayout>
+    </com.andforce.keyboardlayout.KeyboardRelativeLayout>
 
 
 </ScrollView>
