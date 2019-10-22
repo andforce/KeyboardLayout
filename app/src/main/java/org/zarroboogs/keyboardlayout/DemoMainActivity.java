@@ -65,7 +65,6 @@ public class DemoMainActivity extends Activity {
             public void onKeyBoardHide() {
 
                 if (mSwitchClicked) {
-//                    mImageView.setVisibility(View.VISIBLE);
                     showViewWithAnim(smilePickerLayout);
                 }
             }
@@ -112,7 +111,6 @@ public class DemoMainActivity extends Activity {
         Animation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0,
                 Animation.RELATIVE_TO_SELF, 1, Animation.RELATIVE_TO_SELF, 0);
         animation.setDuration(150);
-//        animation.setFillAfter(true);
 
         view.startAnimation(animation);
 

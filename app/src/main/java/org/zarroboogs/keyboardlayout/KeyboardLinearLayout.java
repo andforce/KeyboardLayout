@@ -2,13 +2,8 @@
 package org.zarroboogs.keyboardlayout;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import org.zarroboogs.keyboardlayout.helper.KeyboardHelper;
 

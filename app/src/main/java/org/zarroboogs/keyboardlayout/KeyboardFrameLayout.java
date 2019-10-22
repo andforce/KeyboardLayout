@@ -4,7 +4,6 @@ package org.zarroboogs.keyboardlayout;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import org.zarroboogs.keyboardlayout.helper.KeyboardHelper;
 
