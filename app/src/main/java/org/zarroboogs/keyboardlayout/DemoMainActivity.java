@@ -80,16 +80,16 @@ public class DemoMainActivity extends Activity {
 
                 mSwitchClicked = true;
 
-                if (mRelativeLsyout.getKeyBoardHelper().isKeyboardShow()) {
+                if (mRelativeLsyout.getKeyboardStateWatcher().isKeyboardShow()) {
 
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT, scrollView.getHeight());
                     scrollView.setLayoutParams(params);
 
-                    mRelativeLsyout.getKeyBoardHelper().hideKeyboard();
+                    mRelativeLsyout.getKeyboardStateWatcher().hideKeyboard();
 
                 } else {
-                    mRelativeLsyout.getKeyBoardHelper().showKeyboard(mEditText);
+                    mRelativeLsyout.getKeyboardStateWatcher().showKeyboard(mEditText);
                 }
 
             }

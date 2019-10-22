@@ -8,20 +8,19 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import org.zarroboogs.keyboardlayout.OnKeyboardStateChangeListener;
 
 /**
  * Created by wangdiyuan on 15-5-7.
  */
-public class KeyboardHelper {
+public class KeyboardStateWatcher {
 
     private OnKeyboardStateChangeListener mListener;
-    private static final int UNKNOW = -1;
+    private static final int UNKNOWN = -1;
     private Rect mRect = new Rect();
     private Rect mOriRect = new Rect();
-    private int mKeyboardHeight = UNKNOW;
+    private int mKeyboardHeight = UNKNOWN;
     private boolean isKeyboardShow = false;
     private View mRootView;
 
@@ -30,12 +29,21 @@ public class KeyboardHelper {
         mListener = listener;
     }
 
-    public KeyboardHelper(View root) {
+    public KeyboardStateWatcher(final View root) {
         this.mRootView = root;
         if (this.mRootView == null) {
-            throw new RuntimeException(KeyboardHelper.class.getName() + " RootView Can NOT be null");
+            throw new RuntimeException(KeyboardStateWatcher.class.getName() + " RootView Can NOT be null");
         }
-        setGlobalLayoutListener();
+        root.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mOriRect.height() == 0) {
+                    root.getWindowVisibleDisplayFrame(mOriRect);
+                }
+
+                setGlobalLayoutListener();
+            }
+        });
     }
 
     public void hideKeyboard() {
@@ -46,9 +54,10 @@ public class KeyboardHelper {
         showKeyBoardForce(view);
     }
 
-    public boolean isKeyboardShow(){
+    public boolean isKeyboardShow() {
         return isKeyboardShow;
     }
+
     private static void showKeyBoardForce(final View view) {
         if (view == null) {
             return;
@@ -81,22 +90,13 @@ public class KeyboardHelper {
         });
     }
 
-    /**
-     * this method must call after onLayout()
-     */
-    public void init() {
-        if (mOriRect.height() == 0) {
-            this.mRootView.getWindowVisibleDisplayFrame(mOriRect);
-        }
-    }
-
     private void setGlobalLayoutListener() {
 
         this.mRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (mOriRect.height() == 0) {
-                    throw new RuntimeException(KeyboardHelper.class.getName() + " You must call init() before setGlobalLayoutListener()");
+                    throw new RuntimeException(KeyboardStateWatcher.class.getName() + " You must call init() before setGlobalLayoutListener()");
                 }
                 if (mListener == null) {
                     return;
@@ -105,10 +105,8 @@ public class KeyboardHelper {
                 mRootView.getWindowVisibleDisplayFrame(mRect);
 
                 int height = mOriRect.height() - mRect.height();
-                if (height == mKeyboardHeight) {
-                    return;
-                } else {
-                    if (mKeyboardHeight != UNKNOW) {
+                if (height != mKeyboardHeight) {
+                    if (mKeyboardHeight != UNKNOWN) {
                         if (height > 0) {
                             mListener.onKeyBoardShow(height);
                             isKeyboardShow = true;
@@ -117,7 +115,6 @@ public class KeyboardHelper {
                             isKeyboardShow = false;
                         }
                     }
-
                     mKeyboardHeight = height;
                 }
             }

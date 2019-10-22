@@ -5,5 +5,6 @@ package org.zarroboogs.keyboardlayout;
  */
 public interface OnKeyboardStateChangeListener {
     public void onKeyBoardShow(int height);
+
     public void onKeyBoardHide();
 }
