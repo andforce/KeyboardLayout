@@ -5,7 +5,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-public class HackedViewPager extends android.support.v4.view.ViewPager {
+import androidx.viewpager.widget.ViewPager;
+
+public class HackedViewPager extends ViewPager {
 
     public HackedViewPager(Context context) {
         super(context);
